@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "pages:build": "npx @cloudflare/next-on-pages",
-    "deploy": "npm run build && npm run pages:build && wrangler deploy",
+    "build": "next build && npx @cloudflare/next-on-pages",
+    "deploy": "npm run build && wrangler deploy",
     "start": "next start",
     "lint": "eslint"
   },
