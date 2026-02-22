@@ -8,6 +8,8 @@ import FacilityList from '@/components/FacilityList';
 import CourseList from '@/components/CourseList';
 import MarkerTable from '@/components/MarkerTable';
 
+export const runtime = 'edge';
+
 export default function ClubDetailPage() {
   const params = useParams();
   const id = params.id as string;

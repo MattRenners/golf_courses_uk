@@ -1,0 +1,10 @@
+{
+  "name": "golf-club-discovery",
+  "compatibility_date": "2026-02-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": ".vercel/output/static/_worker.js",
+  "assets": {
+    "directory": ".vercel/output/static",
+    "binding": "ASSETS"
+  }
+}
