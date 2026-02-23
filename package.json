@@ -1,0 +1,16 @@
+{
+  "name": "teetime-finder",
+  "version": "1.0.0",
+  "description": "Discover golf clubs across the UK",
+  "scripts": {
+    "build": "echo 'No build needed - static site ready to deploy'",
+    "start": "python3 -m http.server 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MattRenners/golf_courses_uk"
+  },
+  "keywords": ["golf", "uk", "golf-clubs", "finder"],
+  "author": "MattRenners",
+  "license": "MIT"
+}
