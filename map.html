@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map View - UK Golf Clubs Finder</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <h1>⛳ UK Golf Clubs Finder</h1>
+            <p class="subtitle">Search through 2,547 golf clubs across England, Scotland & Wales</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="view-toggle">
+                <a href="index.html" class="toggle-btn">📋 List View</a>
+                <a href="map.html" class="toggle-btn active">🗺️ Map View</a>
+            </div>
+
+            <div class="search-section">
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Start typing a location..."
+                        autocomplete="off"
+                    />
+                    <div id="suggestionsDropdown" class="suggestions-dropdown"></div>
+                    <button id="searchBtn" class="btn btn-primary">
+                        <span class="icon">🔍</span> Search
+                    </button>
+                    <button id="nearMeBtn" class="btn btn-secondary">
+                        <span class="icon">📍</span> Near Me
+                    </button>
+                </div>
+
+                <div class="filters">
+                    <label>
+                        <input type="radio" name="region" value="all" checked> All UK
+                    </label>
+                    <label>
+                        <input type="radio" name="region" value="england"> England
+                    </label>
+                    <label>
+                        <input type="radio" name="region" value="scotland"> Scotland
+                    </label>
+                    <label>
+                        <input type="radio" name="region" value="wales"> Wales
+                    </label>
+                </div>
+            </div>
+
+            <div id="loadingMessage" class="loading-message" style="display: none;">
+                <div class="spinner"></div>
+                <p>Finding clubs near you...</p>
+            </div>
+
+            <div id="resultsInfo" class="results-info"></div>
+
+            <div id="map" class="map-container"></div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Data from England Golf, Scottish Golf & Wales Golf | <span id="totalClubs">2,547 clubs</span></p>
+    </footer>
+
+    <script src="map.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeeTime Finder - Discover UK Golf Clubs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🏌️</span>
+                <h1>TeeTime Finder</h1>
+            </div>
+            <p class="subtitle">Discover 2,547+ golf clubs across the UK</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="search-section">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Start typing a location..."
+                    autocomplete="off"
+                />
+                <button id="searchBtn" class="search-icon" title="Search">
+                    →
+                </button>
+                <button id="nearMeBtn" class="near-me-text" title="Use my location">
+                    Near Me
+                </button>
+                <div id="suggestionsDropdown" class="suggestions-dropdown"></div>
+            </div>                <div class="filters">
+                    <label>
+                        <input type="radio" name="region" value="all" checked> All UK
+                    </label>
+                    <label>
+                        <input type="radio" name="region" value="england"> England
+                    </label>
+                    <label>
+                        <input type="radio" name="region" value="scotland"> Scotland
+                    </label>
+                    <label>
+                        <input type="radio" name="region" value="wales"> Wales
+                    </label>
+                </div>
+            </div>
+
+            <div id="loadingMessage" class="loading-message" style="display: none;">
+                <div class="spinner"></div>
+                <p>Finding clubs near you...</p>
+            </div>
+
+            <div id="resultsInfo" class="results-info"></div>
+
+            <div id="results" class="results-grid"></div>
+
+            <div id="noResults" class="no-results" style="display: none;">
+                <p>No clubs found. Try a different search term.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Data from England Golf, Scottish Golf & Wales Golf | <span id="totalClubs">2,547 clubs</span></p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Data (optional - keep or remove based on preference)
+data/uk_golf_clubs_complete.json
+data/england_clubs.json
+data/scotland_clubs.json
+data/wales_clubs.json
