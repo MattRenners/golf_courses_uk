@@ -2,13 +2,13 @@ let clubsData = [];
 let userLocation = null;
 let locationSuggestions = [];
 
-// Load clubs data
+// Load clubs data from D1 API
 async function loadClubsData() {
     try {
-        const response = await fetch('data/clubs_index.json');
+        const response = await fetch('/api/clubs?limit=3000');
         const data = await response.json();
         clubsData = data.clubs;
-        console.log(`Loaded ${clubsData.length} clubs`);
+        console.log(`Loaded ${clubsData.length} clubs from D1 database`);
         buildLocationSuggestions();
         return clubsData;
     } catch (error) {

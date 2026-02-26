@@ -1,0 +1,9 @@
+name = "golf-clubs-uk"
+compatibility_date = "2024-01-01"
+
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "golf-clubs-uk"
+database_id = "234b08b4-6754-48d2-847a-b1c0867201ab"
