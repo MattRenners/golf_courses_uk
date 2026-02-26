@@ -282,6 +282,12 @@ body {
     margin-bottom: 20px;
 }
 
+.club-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 .club-card {
     background: white;
     border: 1px solid #e0e0e0;
@@ -351,6 +357,12 @@ body {
 
 .club-detail a:hover {
     text-decoration: underline;
+}
+
+.club-detail.view-more {
+    color: #1e7e34;
+    font-weight: 600;
+    margin-top: 8px;
 }
 
 .region-badge {

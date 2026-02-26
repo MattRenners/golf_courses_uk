@@ -221,27 +221,30 @@ function displayResults(clubs, showDistance = false) {
     resultsInfo.innerHTML = `Found ${clubs.length} club${clubs.length !== 1 ? 's' : ''}`;
     
     resultsDiv.innerHTML = clubs.map((club, index) => `
-        <div class="club-card">
-            <img src="${club.image || 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=250&fit=crop'}" 
-                 alt="${club.name}" 
-                 class="club-image"
-                 onerror="this.src='https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=250&fit=crop'">
-            <div class="club-content">
-                <div class="club-header">
-                    <div>
-                        <div class="club-name">${club.name || 'Unknown Club'}</div>
-                        <span class="region-badge region-${club.region}">${club.region}</span>
+        <a href="club.html?id=${club.id}" class="club-card-link">
+            <div class="club-card">
+                <img src="${club.image || 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=250&fit=crop'}" 
+                     alt="${club.name}" 
+                     class="club-image"
+                     onerror="this.src='https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=250&fit=crop'">
+                <div class="club-content">
+                    <div class="club-header">
+                        <div>
+                            <div class="club-name">${club.name || 'Unknown Club'}</div>
+                            <span class="region-badge region-${club.region}">${club.region}</span>
+                        </div>
+                        ${showDistance && club.distance !== undefined ? 
+                            `<div class="club-distance">${club.distance.toFixed(1)} mi</div>` : 
+                            `<div class="club-distance">#${index + 1}</div>`
+                        }
                     </div>
-                    ${showDistance && club.distance !== undefined ? 
-                        `<div class="club-distance">${club.distance.toFixed(1)} mi</div>` : 
-                        `<div class="club-distance">#${index + 1}</div>`
-                    }
-                </div>
-                <div class="club-details">
-                    ${club.address ? `<div class="club-detail">� ${club.address}</div>` : ''}
+                    <div class="club-details">
+                        ${club.address ? `<div class="club-detail">📍 ${club.address}</div>` : ''}
+                        <div class="club-detail view-more">View Details →</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
     `).join('');
 }
 

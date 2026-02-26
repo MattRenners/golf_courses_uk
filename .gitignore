@@ -33,3 +33,4 @@ data/wales_clubs.json
 *_batch_*.sql
 missing_clubs*.json
 
+facilities_import.log

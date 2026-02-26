@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Details - CaddyCompare</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .club-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .club-header {
+            background: linear-gradient(135deg, #1e7e34 0%, #28a745 100%);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .club-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+        }
+        
+        .club-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1em;
+            opacity: 0.95;
+            margin-bottom: 5px;
+        }
+        
+        .club-region {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .info-card h2 {
+            color: #1e7e34;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            min-width: 120px;
+        }
+        
+        .info-value {
+            color: #333;
+            flex: 1;
+        }
+        
+        .info-value a {
+            color: #1e7e34;
+            text-decoration: none;
+        }
+        
+        .info-value a:hover {
+            text-decoration: underline;
+        }
+        
+        .facilities-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        .facilities-section h2 {
+            color: #1e7e34;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .facility-group {
+            margin-bottom: 25px;
+        }
+        
+        .facility-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .facility-group-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .facility-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .facility-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+        
+        .facility-icon {
+            color: #28a745;
+            font-size: 1.2em;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #6c757d;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+        
+        .back-button:hover {
+            background: #5a6268;
+        }
+        
+        .description-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .description-section h2 {
+            color: #1e7e34;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px;
+        }
+        
+        .no-facilities {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+            font-style: italic;
+        }
+        
+        .member-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #1e7e34;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/">
+                <img src="logo.png" alt="CaddyCompare - Golf Membership Fees & Details" class="logo-img">
+            </a>
+            <p class="subtitle">Compare membership costs & fees at 2,500+ UK golf clubs</p>
+        </div>
+    </header>
+
+    <main class="club-detail-container">
+        <a href="/" class="back-button">
+            ← Back to Search
+        </a>
+        
+        <div id="loading" class="loading">
+            <p>Loading club details...</p>
+        </div>
+        
+        <div id="error" class="error" style="display: none;"></div>
+        
+        <div id="clubContent" style="display: none;">
+            <!-- Club header -->
+            <div class="club-header">
+                <h1 id="clubName"></h1>
+                <div class="club-location">
+                    <span id="clubAddress"></span>
+                </div>
+                <div class="club-location">
+                    <span id="clubTown"></span>
+                </div>
+                <span class="club-region" id="clubRegion"></span>
+            </div>
+
+            <!-- Description -->
+            <div id="descriptionSection" class="description-section" style="display: none;">
+                <h2>About This Club</h2>
+                <p id="clubDescription"></p>
+            </div>
+
+            <!-- Info grid -->
+            <div class="info-grid">
+                <!-- Contact Info -->
+                <div class="info-card">
+                    <h2>Contact Information</h2>
+                    <div id="contactInfo"></div>
+                </div>
+
+                <!-- Course Details -->
+                <div class="info-card">
+                    <h2>Course Details</h2>
+                    <div id="courseDetails"></div>
+                </div>
+
+                <!-- Membership Stats -->
+                <div class="info-card" id="membershipCard" style="display: none;">
+                    <h2>Membership</h2>
+                    <div id="membershipStats"></div>
+                </div>
+            </div>
+
+            <!-- Facilities -->
+            <div id="facilitiesSection" class="facilities-section" style="display: none;">
+                <h2>Facilities & Amenities</h2>
+                <div id="facilitiesContent"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 CaddyCompare. Data sourced from England Golf, Scottish Golf, and Wales Golf. 2,500+ clubs.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Get club ID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const clubId = urlParams.get('id');
+
+        if (!clubId) {
+            showError('No club ID specified');
+        } else {
+            loadClubDetails(clubId);
+        }
+
+        async function loadClubDetails(id) {
+            try {
+                const response = await fetch(`/api/club/${id}`);
+                if (!response.ok) {
+                    throw new Error('Club not found');
+                }
+                
+                const data = await response.json();
+                displayClubDetails(data);
+            } catch (error) {
+                showError('Failed to load club details: ' + error.message);
+            }
+        }
+
+        function displayClubDetails(data) {
+            const { club, facilities, facilityCount } = data;
+
+            // Update page title
+            document.title = `${club.name} - CaddyCompare`;
+
+            // Header
+            document.getElementById('clubName').textContent = club.name;
+            document.getElementById('clubAddress').textContent = club.address || '';
+            document.getElementById('clubTown').textContent = [club.town, club.county, club.postcode].filter(Boolean).join(', ');
+            document.getElementById('clubRegion').textContent = club.region;
+
+            // Description
+            if (club.description) {
+                document.getElementById('descriptionSection').style.display = 'block';
+                document.getElementById('clubDescription').textContent = club.description;
+            }
+
+            // Contact Info
+            let contactHTML = '';
+            if (club.phone) contactHTML += `<div class="info-row"><span class="info-label">Phone:</span><span class="info-value"><a href="tel:${club.phone}">${club.phone}</a></span></div>`;
+            if (club.email) contactHTML += `<div class="info-row"><span class="info-label">Email:</span><span class="info-value"><a href="mailto:${club.email}">${club.email}</a></span></div>`;
+            if (club.website) contactHTML += `<div class="info-row"><span class="info-label">Website:</span><span class="info-value"><a href="${club.website}" target="_blank">Visit Website →</a></span></div>`;
+            if (club.pro_shop_phone) contactHTML += `<div class="info-row"><span class="info-label">Pro Shop:</span><span class="info-value"><a href="tel:${club.pro_shop_phone}">${club.pro_shop_phone}</a></span></div>`;
+            document.getElementById('contactInfo').innerHTML = contactHTML || '<p class="no-facilities">No contact information available</p>';
+
+            // Course Details
+            let courseHTML = '';
+            if (club.holes) courseHTML += `<div class="info-row"><span class="info-label">Holes:</span><span class="info-value">${club.holes}</span></div>`;
+            if (club.founding_year) courseHTML += `<div class="info-row"><span class="info-label">Founded:</span><span class="info-value">${club.founding_year}</span></div>`;
+            if (club.head_pro_name) courseHTML += `<div class="info-row"><span class="info-label">Head Pro:</span><span class="info-value">${club.head_pro_name}</span></div>`;
+            if (club.manager_name) courseHTML += `<div class="info-row"><span class="info-label">Manager:</span><span class="info-value">${club.manager_name}</span></div>`;
+            if (club.tee_booking_url) courseHTML += `<div class="info-row"><span class="info-label">Book Tee:</span><span class="info-value"><a href="${club.tee_booking_url}" target="_blank">Book Now →</a></span></div>`;
+            if (club.membership_url) courseHTML += `<div class="info-row"><span class="info-label">Membership:</span><span class="info-value"><a href="${club.membership_url}" target="_blank">Join →</a></span></div>`;
+            document.getElementById('courseDetails').innerHTML = courseHTML || '<p class="no-facilities">No course details available</p>';
+
+            // Membership Stats
+            if (club.total_members > 0) {
+                document.getElementById('membershipCard').style.display = 'block';
+                let memberHTML = '<div class="member-stats">';
+                if (club.total_members) memberHTML += `<div class="stat-box"><span class="stat-number">${club.total_members}</span><span class="stat-label">Total Members</span></div>`;
+                if (club.total_men) memberHTML += `<div class="stat-box"><span class="stat-number">${club.total_men}</span><span class="stat-label">Men</span></div>`;
+                if (club.total_women) memberHTML += `<div class="stat-box"><span class="stat-number">${club.total_women}</span><span class="stat-label">Women</span></div>`;
+                memberHTML += '</div>';
+                document.getElementById('membershipStats').innerHTML = memberHTML;
+            }
+
+            // Facilities
+            if (facilityCount > 0) {
+                document.getElementById('facilitiesSection').style.display = 'block';
+                let facilitiesHTML = '';
+                
+                for (const [groupName, items] of Object.entries(facilities)) {
+                    facilitiesHTML += `
+                        <div class="facility-group">
+                            <div class="facility-group-title">${groupName}</div>
+                            <div class="facility-list">
+                    `;
+                    
+                    for (const facility of items) {
+                        const icon = facility.icon ? `<i class="facility-icon">✓</i>` : '<i class="facility-icon">✓</i>';
+                        facilitiesHTML += `
+                            <div class="facility-item">
+                                ${icon}
+                                <span>${facility.name}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    facilitiesHTML += '</div></div>';
+                }
+                
+                document.getElementById('facilitiesContent').innerHTML = facilitiesHTML;
+            }
+
+            // Show content, hide loading
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('clubContent').style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error').textContent = message;
+        }
+    </script>
+</body>
+</html>
