@@ -39,6 +39,12 @@ body {
     margin-bottom: 5px;
 }
 
+.logo-img {
+    height: 50px;
+    width: auto;
+    margin-right: 10px;
+}
+
 .logo-icon {
     font-size: 2rem;
     line-height: 1;
