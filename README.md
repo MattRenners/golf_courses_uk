@@ -1,21 +1,22 @@
-# TeeTime Finder
+# CaddyCompare
 
-**Discover 2,547+ golf clubs across the UK**
+**Compare membership costs & fees at 2,500+ UK golf clubs**
 
-A modern, fast, and beautiful golf club discovery website featuring location-based search, GPS "Near Me" functionality, and an intuitive autocomplete interface.
+Your helpful caddy for finding and comparing golf club memberships across the UK. Features location-based search, detailed club information including membership fees, and an intuitive interface to help you find the perfect club.
 
 ## Features
 
-- Smart Search - Type-ahead autocomplete for towns, counties, and postcodes
-- Location-Based - Find the 20 nearest golf clubs from any UK location
-- GPS "Near Me" - One-click access to nearby clubs using your device location
-- Regional Filters - Filter by England, Scotland, Wales, or All UK
-- Responsive Design - Works beautifully on desktop, tablet, and mobile
-- Fast & Lightweight - 429KB JSON index loads instantly
+- **Smart Search** - Type-ahead autocomplete for towns, counties, and postcodes
+- **Location-Based** - Find the 20 nearest golf clubs from any UK location
+- **GPS "Near Me"** - One-click access to nearby clubs using your device location
+- **Regional Filters** - Filter by England, Scotland, Wales, or All UK
+- **Detailed Club Info** - Websites, emails, facilities, membership details, and more
+- **Cloudflare D1 Database** - Fast, scalable database with enhanced club data
+- **Responsive Design** - Works beautifully on desktop, tablet, and mobile
 
 ## Data Coverage
 
-- 2,547 Total Clubs
+- 2,544 Total Clubs
   - 1,808 clubs in England
   - 590 clubs in Scotland
   - 149 clubs in Wales
