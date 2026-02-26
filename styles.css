@@ -40,9 +40,9 @@ body {
 }
 
 .logo-img {
-    height: 50px;
+    height: 80px;
     width: auto;
-    margin-right: 10px;
+    display: block;
 }
 
 .logo-icon {
