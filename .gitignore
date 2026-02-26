@@ -25,3 +25,11 @@ data/uk_golf_clubs_complete.json
 data/england_clubs.json
 data/scotland_clubs.json
 data/wales_clubs.json
+
+# Wrangler local state
+.wrangler/
+
+# Temporary import files
+*_batch_*.sql
+missing_clubs*.json
+
