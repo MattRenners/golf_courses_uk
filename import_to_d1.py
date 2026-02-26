@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 """
 Import enhanced golf club data into Cloudflare D1 database.
 Fetches detailed information from regional APIs and inserts into D1.

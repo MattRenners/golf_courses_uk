@@ -29,7 +29,7 @@ def fetch_club_details(region, club_id):
             'description': data.get('FacilityDescription'),
             'amenities': data.get('AmenitiesDescription'),
             'holes': data.get('NoOfHoles'),
-            'image': data.get('LogoImage'),
+            'image': data.get('LogoImage'),  # Base64 encoded logo
             'founding_year': data.get('FoundingYear'),
             'head_pro_name': data.get('HeadProName'),
             'head_pro_email': data.get('HeadProEmail'),
