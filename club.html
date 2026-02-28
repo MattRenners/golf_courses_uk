@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Club Details - CaddyCompare</title>
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Clerk Authentication -->
+    <script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="YOUR_CLERK_PUBLISHABLE_KEY"
+        src="https://[your-clerk-frontend-api].clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
+    
     <style>
         .club-detail-container {
             max-width: 1200px;
@@ -233,6 +243,139 @@
             color: #666;
             margin-top: 5px;
         }
+        
+        .claim-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .claim-button {
+            background: white;
+            color: #1e7e34;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .claim-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .claimed-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .sign-in-button, .sign-up-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        
+        .sign-in-button:hover, .sign-up-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        #claimModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .modal-content h2 {
+            margin-top: 0;
+            color: #1e7e34;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .modal-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-button-primary {
+            background: #1e7e34;
+            color: white;
+        }
+        
+        .modal-button-primary:hover {
+            background: #155724;
+        }
+        
+        .modal-button-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .modal-button-secondary:hover {
+            background: #d0d0d0;
+        }
     </style>
 </head>
 <body>
@@ -267,6 +410,18 @@
                     <span id="clubTown"></span>
                 </div>
                 <span class="club-region" id="clubRegion"></span>
+                
+                <!-- Claim Section -->
+                <div class="claim-section">
+                    <div id="claimStatus"></div>
+                    <div id="authButtons" class="user-actions" style="display: none;">
+                        <button id="signInBtn" class="sign-in-button">Sign In</button>
+                        <button id="signUpBtn" class="sign-up-button">Sign Up</button>
+                    </div>
+                    <div id="userMenu" class="user-menu" style="display: none;">
+                        <button id="userButton" class="user-button"></button>
+                    </div>
+                </div>
             </div>
 
             <!-- Description -->
@@ -420,6 +575,181 @@
             document.getElementById('error').style.display = 'block';
             document.getElementById('error').textContent = message;
         }
+    </script>
+    
+    <!-- Claim Modal -->
+    <div id="claimModal">
+        <div class="modal-content">
+            <h2>Claim This Club</h2>
+            <p id="modalMessage">To claim this club, you must have an email address from the club's domain.</p>
+            <p id="clubDomain" style="font-weight: 600; color: #1e7e34;"></p>
+            <div class="modal-buttons">
+                <button class="modal-button modal-button-secondary" onclick="closeClaimModal()">Cancel</button>
+                <button class="modal-button modal-button-primary" id="confirmClaimBtn">Confirm Claim</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Clerk (when keys are set up)
+        let clerk = null;
+        let currentUser = null;
+        let currentClub = null;
+        
+        // Initialize Clerk when script loads
+        window.addEventListener('load', async () => {
+            if (typeof Clerk !== 'undefined') {
+                clerk = new Clerk('YOUR_CLERK_PUBLISHABLE_KEY');
+                await clerk.load();
+                currentUser = clerk.user;
+                updateAuthUI();
+            }
+        });
+        
+        function updateAuthUI() {
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userButton = document.getElementById('userButton');
+            
+            if (currentUser) {
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'block';
+                userButton.textContent = currentUser.emailAddresses[0].emailAddress;
+            } else {
+                authButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+            }
+            
+            updateClaimButton();
+        }
+        
+        async function updateClaimButton() {
+            if (!currentClub) return;
+            
+            const claimStatus = document.getElementById('claimStatus');
+            
+            // Check if club is already claimed
+            const response = await fetch(`/api/club/${currentClub.id}/claim-status`);
+            const data = await response.json();
+            
+            if (data.claimed) {
+                if (data.claimedByCurrentUser) {
+                    claimStatus.innerHTML = '<div class="claimed-badge">✓ You manage this club</div>';
+                } else {
+                    claimStatus.innerHTML = '<div class="claimed-badge">✓ Verified Club</div>';
+                }
+            } else if (currentUser) {
+                claimStatus.innerHTML = '<button class="claim-button" onclick="showClaimModal()">🏆 Claim This Club</button>';
+            } else {
+                claimStatus.innerHTML = '<button class="claim-button" onclick="document.getElementById(\'signInBtn\').click()">🏆 Claim This Club</button>';
+            }
+        }
+        
+        function showClaimModal() {
+            if (!currentUser) {
+                alert('Please sign in to claim this club');
+                return;
+            }
+            
+            const modal = document.getElementById('claimModal');
+            const clubDomain = document.getElementById('clubDomain');
+            
+            // Extract domain from club website or email
+            let expectedDomain = '';
+            if (currentClub.website) {
+                expectedDomain = new URL(currentClub.website).hostname.replace('www.', '');
+            } else if (currentClub.email) {
+                expectedDomain = currentClub.email.split('@')[1];
+            }
+            
+            clubDomain.textContent = `Required email domain: @${expectedDomain}`;
+            modal.style.display = 'flex';
+        }
+        
+        function closeClaimModal() {
+            document.getElementById('claimModal').style.display = 'none';
+        }
+        
+        document.getElementById('confirmClaimBtn').addEventListener('click', async () => {
+            if (!currentUser) return;
+            
+            const userEmail = currentUser.emailAddresses[0].emailAddress;
+            const userDomain = userEmail.split('@')[1];
+            
+            // Extract expected domain
+            let expectedDomain = '';
+            if (currentClub.website) {
+                expectedDomain = new URL(currentClub.website).hostname.replace('www.', '');
+            } else if (currentClub.email) {
+                expectedDomain = currentClub.email.split('@')[1];
+            }
+            
+            // Verify email domain matches
+            if (!userEmail.endsWith('@' + expectedDomain)) {
+                alert(`Your email must be from ${expectedDomain} to claim this club.`);
+                return;
+            }
+            
+            // Submit claim
+            try {
+                const response = await fetch(`/api/club/${currentClub.id}/claim`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${await clerk.session.getToken()}`
+                    },
+                    body: JSON.stringify({
+                        email: userEmail,
+                        clerk_user_id: currentUser.id
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert('Claim submitted successfully! You can now manage membership details.');
+                    closeClaimModal();
+                    updateClaimButton();
+                    // Redirect to dashboard
+                    window.location.href = `/club-admin.html?id=${currentClub.id}`;
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error submitting claim: ' + error.message);
+            }
+        });
+        
+        // Sign in/up buttons
+        document.getElementById('signInBtn').addEventListener('click', () => {
+            if (clerk) {
+                clerk.openSignIn();
+            } else {
+                alert('Authentication is being set up. Please check back soon!');
+            }
+        });
+        
+        document.getElementById('signUpBtn').addEventListener('click', () => {
+            if (clerk) {
+                clerk.openSignUp();
+            } else {
+                alert('Authentication is being set up. Please check back soon!');
+            }
+        });
+        
+        document.getElementById('userButton').addEventListener('click', () => {
+            if (clerk) {
+                clerk.openUserProfile();
+            }
+        });
+        
+        // Store club data when loaded
+        const originalDisplayClubDetails = displayClubDetails;
+        displayClubDetails = function(data) {
+            currentClub = data.club;
+            originalDisplayClubDetails(data);
+            updateClaimButton();
+        };
     </script>
 </body>
 </html>

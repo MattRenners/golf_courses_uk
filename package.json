@@ -8,9 +8,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MattRenners/golf_courses_uk"
+    "url": "git+https://github.com/MattRenners/golf_courses_uk.git"
   },
-  "keywords": ["golf", "uk", "golf-clubs", "finder"],
+  "keywords": [
+    "golf",
+    "uk",
+    "golf-clubs",
+    "finder"
+  ],
   "author": "MattRenners",
-  "license": "MIT"
+  "license": "MIT",
+  "main": "app.js",
+  "bugs": {
+    "url": "https://github.com/MattRenners/golf_courses_uk/issues"
+  },
+  "homepage": "https://github.com/MattRenners/golf_courses_uk#readme"
 }

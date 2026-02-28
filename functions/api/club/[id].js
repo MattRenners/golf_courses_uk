@@ -60,6 +60,37 @@ export async function onRequestGet(context) {
       facilities: facilitiesByGroup,
       facilityCount: facilitiesResult.results?.length || 0
     };
+    
+    // Check if club is claimed
+    const claimQuery = 'SELECT * FROM club_claims WHERE club_id = ? AND verified = 1';
+    const claimResult = await env.DB.prepare(claimQuery).bind(clubId).first();
+    
+    if (claimResult) {
+      response.claimed = true;
+      response.claimedAt = claimResult.claimed_at;
+      
+      // Get membership tiers if claimed
+      const membershipQuery = `
+        SELECT * FROM membership_tiers 
+        WHERE club_id = ? AND is_active = 1 
+        ORDER BY display_order, annual_fee
+      `;
+      const membershipResult = await env.DB.prepare(membershipQuery).bind(clubId).all();
+      response.membershipTiers = membershipResult.results || [];
+      
+      // Get green fees if claimed
+      const greenFeesQuery = `
+        SELECT * FROM green_fees 
+        WHERE club_id = ? AND is_active = 1 
+        ORDER BY day_type, fee_type
+      `;
+      const greenFeesResult = await env.DB.prepare(greenFeesQuery).bind(clubId).all();
+      response.greenFees = greenFeesResult.results || [];
+    } else {
+      response.claimed = false;
+      response.membershipTiers = [];
+      response.greenFees = [];
+    }
 
     return new Response(JSON.stringify(response), { headers: corsHeaders });
   } catch (error) {
